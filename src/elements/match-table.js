@@ -17,7 +17,7 @@ const playerResultsTable = (results, teamId) => {
 			);
 		}
 	});
-	table.sortColumn(2, function(a, b) {
+	table.sortColumn(1, function(a, b) {
 		return b - a;
 	});
 	table.removeBorder();
