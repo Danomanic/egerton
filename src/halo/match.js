@@ -3,7 +3,7 @@ const config = require('../config');
 const lib = require('lib')({ token: config.STDLIB_SECRET_TOKEN });
 const HaloAPI = lib.halo.infinite['@0.3.3'];
 const { playerResultsTable, teamResultsTable } = require('../elements/match-table');
-const db = require('monk')('localhost/egerton');
+const db = require('monk')(config.DB_URI);
 
 const matches = db.get('matches');
 

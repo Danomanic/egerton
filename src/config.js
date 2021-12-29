@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 module.exports = Object.freeze({
+	DB_URI: process.env.DB_URI,
 	STDLIB_SECRET_TOKEN: process.env.STDLIB_SECRET_TOKEN,
 	TOKEN: process.env.BOT_TOKEN,
 	CLIENT_ID: process.env.CLIENT_ID,
