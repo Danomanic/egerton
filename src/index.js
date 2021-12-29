@@ -1,63 +1,45 @@
-require('dotenv').config();
-const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});
-const Discord = require("discord.js");
+const fs = require('fs');
+const { Client, Collection, Intents } = require('discord.js');
+const CronJob = require('cron').CronJob;
+const config = require('./config');
+const { deployCommands } = require('./deploy-commands');
+const { match } = require('./halo/match');
 
-const client = new Discord.Client({intents: ["GUILDS", "GUILD_MESSAGES"]});
+const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
-const HaloAPI = lib.halo.infinite['@0.3.3'];
+const job = new CronJob('* * * * *', function() {
+	match(client.channels.cache.get(config.CHANNEL_ID));
+}, null, true, 'Europe/London');
 
+client.once('ready', async () => {
+	deployCommands();
+	console.log('Ready!');
+	client.user.setActivity('Hide the Oddball');
+	job.start();
+});
 
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
+client.commands = new Collection();
+const commandFiles = fs.readdirSync(`${__dirname}/commands`).filter((file) => file.endsWith('.js'));
 
-const commands = [{
-  name: 'ping',
-  description: 'Replies with Pong!'
-}]; 
-
-const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
-
-(async () => {
-  try {
-    console.log('Started refreshing application (/) commands.');
-
-    await rest.put(
-      Routes.applicationGuildCommands(925520980619694132, 872719039422672896),
-      { body: commands },
-    );
-
-    console.log('Successfully reloaded application (/) commands.');
-  } catch (error) {
-    console.error(error);
-  }
-})();
-
-
-const getLastMatch = async () => {
-    let result = await HaloAPI.stats.matches.list({
-    gamertag: `danoidx`,
-    limit: {
-        'count': 1,
-        'offset': 0
-    },
-    mode: 'matchmade'
-    });
-    return result.data[0].id;
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.data.name, command);
 }
 
-const getMatchData = async (matchId) => {
+client.on('interactionCreate', async (interaction) => {
+	if (!interaction.isCommand()) return;
 
-    let result = await HaloAPI.stats.matches.retrieve({
-        id: matchId
-    });
+	const command = client.commands.get(interaction.commandName);
 
-    return result.data;
-}
+	if (!command) return;
 
-const main = async () => {
-    const lastMatch = await getLastMatch();
-    const matchData = await getMatchData(lastMatch);
-    //console.log(matchData);
-}
+	try {
+		await command.execute(interaction);
+	}
+	catch (error) {
+		console.error(error);
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	}
+});
 
-main();
+client.login(config.TOKEN);
