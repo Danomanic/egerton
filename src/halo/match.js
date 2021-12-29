@@ -9,14 +9,15 @@ const matches = db.get('matches');
 
 const sendMatchEmbed = async (match, channel, gamerTag) => {
 	const gamerTagStats = await getGamerTagStats(gamerTag, match.players);
+	const allGuildies = await getAllGuildies(match.players);
 	const embedBuilder = new MessageEmbed()
 		.setColor(getOutcomeColour(gamerTagStats.outcome))
-		.setTitle(`${gamerTagStats.gamertag} played a new match!`)
+		.setTitle('A member of our Team has played a match!')
 		.setAuthor({ name: 'Egerton', iconURL: 'https://i.imgur.com/YEjKMuZ.png' })
-		.setDescription('The member of the Halo Team has played a match, here are the results!')
+		.setDescription('A member of the Halo Team has played a match, here are the results!')
 		.addFields(
 			{ name: 'Result', value: `${gamerTagStats.outcome.toUpperCase()}`, inline: true },
-			{ name: `${gamerTagStats.gamertag}'s Rank`, value: `${gamerTagStats.progression.csr.post_match.tier} (${gamerTagStats.progression.csr.post_match.value})`, inline: true },
+			{ name: 'Guildies', value: `${allGuildies}`, inline: true },
 			{ name: '\u200B', value: '\u200B' },
 			{ name: 'Map', value: `${match.details.map.name} (${match.details.playlist.name})`, inline: true },
 			{ name: 'Gametype', value: match.details.category.name, inline: true },
@@ -39,6 +40,18 @@ const getGamerTagStats = async (gamerTag, players) => {
 			return player;
 		}
 	});
+};
+
+const getAllGuildies = async (players) => {
+	let guildies = '';
+	for (const player of players) {
+		config.GAMER_TAGS.find((member) => {
+			if (player.gamertag.toLowerCase() === member.toLowerCase()) {
+				guildies += `**${player.gamertag}** __${player.progression.csr.post_match.tier}__ *${player.progression.csr.post_match.value}*\n`;
+			}
+		});
+	}
+	return guildies.trim();
 };
 
 const getOutcomeColour = (outcome) => {
