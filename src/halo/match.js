@@ -8,17 +8,20 @@ const db = require('monk')(config.DB_URI);
 const matches = db.get('matches');
 
 const sendMatchEmbed = async (match, channel, gamerTag) => {
-	const gamerTabStats = await getGamerTagStats(gamerTag, match.players);
+	const gamerTagStats = await getGamerTagStats(gamerTag, match.players);
 	const embedBuilder = new MessageEmbed()
-		.setColor(getOutcomeColour(gamerTabStats.outcome))
-		.setTitle(`Detected ${gamerTabStats.gamertag} played a new match!`)
+		.setColor(getOutcomeColour(gamerTagStats.outcome))
+		.setTitle(`Detected ${gamerTagStats.gamertag} played a new match!`)
 		.setAuthor({ name: 'Egerton', iconURL: 'https://i.imgur.com/YEjKMuZ.png' })
 		.setDescription('The member of the Halo Team has played a match, here are the results!')
 		.addFields(
-			{ name: 'Result', value: `${gamerTabStats.outcome}` },
+			{ name: 'Result', value: `${gamerTagStats.outcome.toUpperCase()}`, inline: true },
+			{ name: `${gamerTagStats.gamertag}'s Rank`, value: `${gamerTagStats.progression.csr.post_match.tier} (${gamerTagStats.progression.csr.post_match.value})`, inline: true },
+			{ name: '\u200B', value: '\u200B' },
 			{ name: 'Map', value: `${match.details.map.name} (${match.details.playlist.name})`, inline: true },
 			{ name: 'Gametype', value: match.details.category.name, inline: true },
 			{ name: 'Duration', value: match.duration.human, inline: true },
+			{ name: '\u200B', value: '\u200B' },
 			{ name: 'Teams', value: teamResultsTable(match.teams.details) },
 			{ name: '\u200B', value: playerResultsTable(match.players, 0) },
 			{ name: '\u200B', value: playerResultsTable(match.players, 1) },
