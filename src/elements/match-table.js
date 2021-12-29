@@ -2,7 +2,7 @@ const AsciiTable = require('ascii-table');
 
 const playerResultsTable = (results, teamId) => {
 	const table = new AsciiTable();
-	table.setHeading('', 'S', 'K', 'D', 'A', 'CSR');
+	table.setHeading('', 'S', 'K', 'D', 'A', 'Dmg', 'CSR');
 	results.forEach((playerDetails) => {
 		if (playerDetails.team.id === teamId) {
 			table.setTitle(playerDetails.team.name);
@@ -12,6 +12,7 @@ const playerResultsTable = (results, teamId) => {
 				`${playerDetails.stats.core.summary.kills}`,
 				`${playerDetails.stats.core.summary.deaths}`,
 				`${playerDetails.stats.core.summary.assists}`,
+				`${playerDetails.stats.core.damage.dealt}`,
 				`${playerDetails.progression.csr.post_match.value} [${getCSRDifference(playerDetails.progression.csr.pre_match.value, playerDetails.progression.csr.post_match.value)}]`,
 			);
 		}
