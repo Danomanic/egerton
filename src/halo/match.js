@@ -11,7 +11,7 @@ const sendMatchEmbed = async (match, channel, gamerTag) => {
 	const gamerTagStats = await getGamerTagStats(gamerTag, match.players);
 	const embedBuilder = new MessageEmbed()
 		.setColor(getOutcomeColour(gamerTagStats.outcome))
-		.setTitle(`Detected ${gamerTagStats.gamertag} played a new match!`)
+		.setTitle(`${gamerTagStats.gamertag} played a new match!`)
 		.setAuthor({ name: 'Egerton', iconURL: 'https://i.imgur.com/YEjKMuZ.png' })
 		.setDescription('The member of the Halo Team has played a match, here are the results!')
 		.addFields(
