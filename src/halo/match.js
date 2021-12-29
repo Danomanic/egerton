@@ -80,10 +80,10 @@ const match = async (channel) => {
 		const matchCount = await matches.count({ matchId: lastMatch.id });
 		console.log(`Checking ${gamerTag}...`);
 		if (matchCount === 0) {
+			await matches.insert({ gamertag: gamerTag, matchId: lastMatch.id, timestamp: new Date() });
 			console.log(`+ ${gamerTag} has played a new match!`);
 			const matchData = await getMatchData(lastMatch.id);
 			await sendMatchEmbed(matchData, channel, gamerTag);
-			await matches.insert({ gamertag: gamerTag, matchId: lastMatch.id, timestamp: new Date() });
 		}
 	});
 };
