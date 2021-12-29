@@ -1,0 +1,17 @@
+{
+  "name": "egerton",
+  "version": "1.0.0",
+  "description": "Halo Infinite Discord Bot",
+  "main": "src/index.js",
+  "repository": "git@github.com:Danomanic/egerton.git",
+  "author": "Daniel Pomfret <dan@coly.uk>",
+  "license": "MIT",
+  "dependencies": {
+    "@discordjs/builders": "^0.10.0",
+    "@discordjs/rest": "^0.2.0-canary.0",
+    "discord-api-types": "^0.26.0",
+    "discord.js": "^13.4.0",
+    "dotenv": "^10.0.0",
+    "lib": "^4.3.3"
+  }
+}
