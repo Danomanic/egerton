@@ -47,7 +47,7 @@ const getAllGuildies = async (players) => {
 	for (const player of players) {
 		config.GAMER_TAGS.find((member) => {
 			if (player.gamertag.toLowerCase() === member.toLowerCase()) {
-				guildies += `**${player.gamertag}** __${player.progression.csr.post_match.tier}__ *${player.progression.csr.post_match.value}*\n`;
+				guildies += `**${player.gamertag}** __${player.progression.csr.post_match.tier}__ *${player.progression.csr.post_match.value}* [${getCSRDifference(player.progression.csr.pre_match.value, player.progression.csr.post_match.value)}]\n`;
 			}
 		});
 	}
@@ -99,6 +99,12 @@ const match = async (channel) => {
 			await sendMatchEmbed(matchData, channel, gamerTag);
 		}
 	}
+};
+
+const getCSRDifference = (before, after) => {
+	const difference = after - before;
+
+	return (difference <= 0 ? '' : '+') + difference;
 };
 
 module.exports = { match };
