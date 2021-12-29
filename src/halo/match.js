@@ -75,17 +75,17 @@ const getMatchData = async (matchId) => {
 const match = async (channel) => {
 	console.log('\n----------------------------\nChecking for new matches...\n----------------------------\n');
 
-	await config.GAMER_TAGS.forEach(async (gamerTag) => {
+	for (const gamerTag of config.GAMER_TAGS) {
 		const lastMatch = await getLastMatch(gamerTag);
 		const matchCount = await matches.count({ matchId: lastMatch.id });
 		console.log(`Checking ${gamerTag}...`);
 		if (matchCount === 0) {
+			console.log(`+ Updating ${lastMatch.id} for ${gamerTag}...`);
 			await matches.insert({ gamertag: gamerTag, matchId: lastMatch.id, timestamp: new Date() });
-			console.log(`+ ${gamerTag} has played a new match!`);
 			const matchData = await getMatchData(lastMatch.id);
 			await sendMatchEmbed(matchData, channel, gamerTag);
 		}
-	});
+	}
 };
 
 module.exports = { match };
