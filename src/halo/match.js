@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const config = require('../config');
 const Halo = require('../lib/halo');
-const { playerResultsTable, teamResultsTable } = require('../elements/match-table');
+const { playerResultsTable, teamResultsTable } = require('./elements/match-table');
 const { getOutcomeColour } = require('../helpers/formatter');
 const { getGamerTagStats, getAllGuildies } = require('../helpers/guildies');
 const db = require('monk')(config.DB_URI);
