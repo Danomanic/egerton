@@ -1,10 +1,11 @@
 const { MessageEmbed } = require('discord.js');
 const config = require('../config');
 const Halo = require('../lib/halo');
-const { playerResultsTable, teamResultsTable } = require('./elements/match-table');
+const { teamResultsTable } = require('./elements/match-table');
 const { getOutcomeColour } = require('../helpers/formatter');
 const { getGamerTagStats, getAllGuildies } = require('../helpers/guildies');
 const db = require('monk')(config.DB_URI);
+const axios = require('axios');
 
 const matches = db.get('matches');
 
@@ -19,20 +20,21 @@ const sendMatchEmbed = async (matchData, channel, gamerTag) => {
 		.addFields(
 			{ name: 'Result', value: `${gamerTagStats.outcome.toUpperCase()}`, inline: true },
 			{ name: 'Guildies', value: `${allGuildies}`, inline: true },
-			{ name: '\u200B', value: '\u200B' },
 			{ name: 'Map', value: `${matchData.details.map.name} (${matchData.details.playlist.name})`, inline: true },
 			{ name: 'Gametype', value: matchData.details.category.name, inline: true },
 			{ name: 'Duration', value: matchData.duration.human, inline: true },
-			{ name: '\u200B', value: '\u200B' },
 			{ name: 'Teams', value: teamResultsTable(matchData.teams.details) },
-			{ name: '\u200B', value: playerResultsTable(matchData.players, 0) },
-			{ name: '\u200B', value: playerResultsTable(matchData.players, 1) },
 		)
+		.setImage(`${config.CLOUDFRONT_DOMAIN}/match/${matchData.id}.png`)
 		.setURL('https://tracker.gg/halo-infinite/match/' + matchData.id)
 		.addField('Tracker.gg Link', 'https://tracker.gg/halo-infinite/match/' + matchData.id)
 		.setTimestamp(new Date(matchData.played_at));
 
 	channel.send({ embeds: [embedBuilder] });
+};
+
+const generatePlayerTableImage = async (matchId) => {
+	return await axios.get(`${config.EGERTON_IMAGES_API}/generate/match/${matchId}`);
 };
 
 const match = async (channel) => {
@@ -46,6 +48,7 @@ const match = async (channel) => {
 			console.log(`+ Updating ${lastMatch.id} for ${gamerTag}...`);
 			await matches.insert({ gamertag: gamerTag, matchId: lastMatch.id, timestamp: new Date() });
 			const matchData = await Halo.getMatchData(lastMatch.id);
+			await generatePlayerTableImage(lastMatch.id);
 			await sendMatchEmbed(matchData, channel, gamerTag);
 		}
 	}
