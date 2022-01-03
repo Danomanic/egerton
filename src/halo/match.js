@@ -14,9 +14,9 @@ const sendMatchEmbed = async (matchData, channel, gamerTag) => {
 	const allGuildies = await getAllGuildies(matchData.players);
 	const embedBuilder = new MessageEmbed()
 		.setColor(getOutcomeColour(gamerTagStats.outcome))
-		.setTitle('A member of our Team has played a match!')
+		.setTitle(`${gamerTagStats.gamertag} played a match!`)
 		.setAuthor({ name: 'Egerton', iconURL: 'https://i.imgur.com/YEjKMuZ.png' })
-		.setDescription('A member of the Halo Team has played a match, here are the results!')
+		.setDescription(`${matchData.details.map.name} ${matchData.details.category.name}`)
 		.addFields(
 			{ name: 'Result', value: `${gamerTagStats.outcome.toUpperCase()}`, inline: true },
 			{ name: 'Guildies', value: `${allGuildies}`, inline: true },
