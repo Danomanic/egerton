@@ -16,7 +16,6 @@ module.exports = {
 		const gamertag = await interaction.options.getString('gamertag');
 		const genUuid = uuid.v1();
 		await axios.get(`${config.EGERTON_IMAGES_API}/generate/gamertag/${gamertag}/${genUuid}`);
-		console.log(`${config.CLOUDFRONT_DOMAIN}/gamertag/${genUuid}.png`);
 		const embedBuilder = new MessageEmbed()
 			.setColor('#0099ff')
 			.setTitle(`${gamertag}'s Stats`)
