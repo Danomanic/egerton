@@ -15,8 +15,6 @@ module.exports = {
 			const gamertag = await interaction.options.getString('gamertag');
 			const genUuid = uuid.v1();
 			const repsonse = await axios.get(`${config.EGERTON_IMAGES_API}/generate/gamertag/${gamertag}/${genUuid}`);
-			console.log(repsonse);
-
 			if (repsonse.status === 200) {
 				const embedBuilder = new MessageEmbed()
 					.setColor('#0099ff')
