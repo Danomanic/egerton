@@ -1,4 +1,4 @@
-const config = require('../config');   
+const config = require('../config');
 const lib = require('lib')({ token: config.STDLIB_SECRET_TOKEN });
 const HaloAPI = lib.halo.infinite['@0.3.3'];
 
@@ -22,4 +22,22 @@ const getMatchData = async (matchId) => {
 	return result.data;
 };
 
-module.exports = { getLastMatch, getMatchData };
+const getPlayerStats = async (gamertag) => {
+	const result = await HaloAPI.stats['service-record'].multiplayer({
+		gamertag: gamertag,
+		experience: 'pvp-only',
+	});
+
+	return result.data;
+};
+
+
+const getGamerTagAppearance = async (gamertag) => {
+	const result = await HaloAPI.appearance({
+		gamertag: gamertag,
+	});
+
+	return result.data;
+};
+
+module.exports = { getLastMatch, getMatchData, getPlayerStats, getGamerTagAppearance };
