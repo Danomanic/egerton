@@ -31,7 +31,7 @@ const teamResultsTable = (results) => {
 		table.addRow(
 			teamDetails.team.name,
 			teamDetails.outcome,
-			teamDetails.stats.core.score,
+			teamDetails.stats.core.points,
 			teamDetails.stats.core.summary.kills,
 			teamDetails.stats.core.summary.deaths,
 			teamDetails.stats.core.summary.assists,
