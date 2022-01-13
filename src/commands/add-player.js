@@ -27,7 +27,7 @@ module.exports = {
 			const lastMatch = await Halo.getLastMatch(gamerTag);
 			if (lastMatch.id && !await players.findOne({ gamerTag })) {
 				await players.insert({ gamerTag, user: user.id, guildId: interaction.guildId, channelId: interaction.channelId });
-				await interaction.followUp(`<@${user.id}> GamerTag exists! I've added to the Database to check for new matches.`);
+				await interaction.followUp(`<@${user.id}> GamerTag exists! I've added ${gamerTag} to the Database to check for new matches.`);
 			}
 		}
 		catch (err) {
