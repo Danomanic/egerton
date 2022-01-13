@@ -15,10 +15,8 @@ const getGamerTagStats = async (gamerTag, players) => {
 const getAllGuildies = async (players) => {
 	let guildies = '';
 	for (const player of players) {
-		if (await playersDb.findOne({ gamerTag: player.gamertag })) {
-			if (player.progression !== null) {
-				guildies += `${player.gamertag} __${player.progression.csr.post_match.tier} ${player.progression.csr.post_match.sub_tier + 1}__ *${player.progression.csr.post_match.value}* [**${getCSRDifference(player.progression.csr.pre_match.value, player.progression.csr.post_match.value)}**]\n`;
-			}
+		if (await playersDb.findOne({ gamerTag: player.gamertag.toLowerCase() })) {
+			guildies += `${player.gamertag} __${player.progression.csr.post_match.tier} ${player.progression.csr.post_match.sub_tier + 1}__ *${player.progression.csr.post_match.value}* [**${getCSRDifference(player.progression.csr.pre_match.value, player.progression.csr.post_match.value)}**]\n`;
 		}
 	}
 	return guildies.trim();
