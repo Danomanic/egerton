@@ -20,7 +20,6 @@ module.exports = {
 		},
 	],
 	async execute(interaction) {
-		console.log(interaction.member);
 		const user = await interaction.user;
 		const gamerTag = await interaction.options.getString('gamertag').toLowerCase();
 		await interaction.reply(`Hello <@${user.id}> - I'm just checking to see if the GamerTag ${gamerTag} exists...`);

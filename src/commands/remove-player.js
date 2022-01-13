@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const Halo = require('../lib/halo');
 const config = require('../config');
 const db = require('monk')(config.DB_URI);
 
