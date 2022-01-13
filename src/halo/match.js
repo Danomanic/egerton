@@ -18,14 +18,12 @@ const sendMatchEmbed = async (matchData, channel, gamerTag) => {
 		.setTitle(`${gamerTagStats.gamertag} played a match!`)
 		.setAuthor({ name: 'Egerton', iconURL: 'https://i.imgur.com/YEjKMuZ.png' })
 		.setDescription(`${matchData.details.map.name} ${matchData.details.category.name}`)
-		.addFields(
-			{ name: 'Result', value: `${gamerTagStats.outcome.toUpperCase()}`, inline: true },
-			{ name: 'Guildies', value: `${allGuildies}`, inline: true },
-			{ name: 'Map', value: `${matchData.details.map.name} (${matchData.details.playlist.name})`, inline: true },
-			{ name: 'Gametype', value: matchData.details.category.name, inline: true },
-			{ name: 'Duration', value: matchData.duration.human, inline: true },
-			{ name: 'Teams', value: teamResultsTable(matchData.teams.details) },
-		)
+		.addField('Result', gamerTagStats.outcome.toUpperCase(), true)
+		.addField('Map', `${matchData.details.map.name} (${matchData.details.playlist.name})`, true)
+		.addField('Guildies', allGuildies, true)
+		.addField('Gametype', matchData.details.category.name, true)
+		.addField('Duration', matchData.duration.human)
+		.addField('Teams', teamResultsTable(matchData.teams.details), false)
 		.setImage(`${config.CLOUDFRONT_DOMAIN}/match/${matchData.id}.png`)
 		.setURL('https://tracker.gg/halo-infinite/match/' + matchData.id)
 		.addField('Tracker.gg Link', 'https://tracker.gg/halo-infinite/match/' + matchData.id)
