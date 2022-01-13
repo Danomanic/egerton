@@ -5,10 +5,12 @@ const Halo = require('../lib/halo');
 const axios = require('axios');
 
 module.exports = {
+	name: 'lastmatch',
 	data: new SlashCommandBuilder()
 		.setName('lastmatch')
 		.setDescription('Get info on a Gamer Tags last match.')
 		.addStringOption(option => option.setName('gamertag').setDescription('The Players Xbox Gamertag')),
+	permissions: [],
 	async execute(interaction) {
 		await interaction.deferReply();
 		try {

@@ -5,10 +5,12 @@ const uuid = require('uuid');
 const axios = require('axios');
 
 module.exports = {
+	name: 'stats',
 	data: new SlashCommandBuilder()
 		.setName('stats')
 		.setDescription('Replies with your Halo Infinite stats.')
 		.addStringOption(option => option.setName('gamertag').setDescription('The Players Xbox Gamertag')),
+	permissions: [],
 	async execute(interaction) {
 		await interaction.deferReply();
 		try {

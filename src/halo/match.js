@@ -7,6 +7,7 @@ const { getGamerTagStats, getAllGuildies } = require('../helpers/guildies');
 const db = require('monk')(config.DB_URI);
 const axios = require('axios');
 
+const players = db.get('players');
 const matches = db.get('matches');
 
 const sendMatchEmbed = async (matchData, channel, gamerTag) => {
@@ -38,20 +39,27 @@ const generatePlayerTableImage = async (matchId) => {
 };
 
 const match = async (channel) => {
-	console.log('\n----------------------------\nChecking for new matches...\n----------------------------\n');
+	console.log('\n----------------------------\nChecking for new matches...');
 
-	for (const gamerTag of config.GAMER_TAGS) {
-		const lastMatch = await Halo.getLastMatch(gamerTag);
-		const matchCount = await matches.count({ matchId: lastMatch.id });
-		console.log(`Checking ${gamerTag}...`);
-		if (matchCount === 0) {
-			console.log(`+ Updating ${lastMatch.id} for ${gamerTag}...`);
-			await matches.insert({ gamertag: gamerTag, matchId: lastMatch.id, timestamp: new Date() });
-			const matchData = await Halo.getMatchData(lastMatch.id);
-			await generatePlayerTableImage(lastMatch.id);
-			await sendMatchEmbed(matchData, channel, gamerTag);
+	const playersToCheck = await players.find({ });
+	for (const player of playersToCheck) {
+		const lastMatch = await Halo.getLastMatch(player.gamerTag);
+		console.log(`\tChecking ${player.gamerTag}...`);
+		if (!await matches.findOne({ matchId: lastMatch.id })) {
+			try {
+				console.log(`\t\tUpdating ${lastMatch.id} for ${player.gamerTag}...`);
+				await matches.insert({ gamertag: player.gamerTag, matchId: lastMatch.id, timestamp: new Date() });
+				const matchData = await Halo.getMatchData(lastMatch.id);
+				await generatePlayerTableImage(lastMatch.id);
+				await sendMatchEmbed(matchData, channel, player.gamerTag);
+			}
+			catch (error) {
+				console.log(error);
+			}
 		}
 	}
+
+	console.log('Done checking...\n----------------------------');
 };
 
 module.exports = { match };
