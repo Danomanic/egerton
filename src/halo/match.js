@@ -33,7 +33,7 @@ const sendMatchEmbed = async (matchData, channel, gamerTag) => {
 };
 
 const generatePlayerTableImage = async (matchId) => {
-	return await axios.get(`${config.EGERTON_IMAGES_API}/generate/match/${matchId}`);
+	return axios.get(`${config.EGERTON_IMAGES_API}/generate/match/${matchId}`);
 };
 
 const match = async (channel) => {
@@ -48,7 +48,7 @@ const match = async (channel) => {
 				console.log(`\t\tUpdating ${lastMatch.id} for ${player.gamerTag}...`);
 				await matches.insert({ gamertag: player.gamerTag, matchId: lastMatch.id, timestamp: new Date() });
 				const matchData = await Halo.getMatchData(lastMatch.id);
-				generatePlayerTableImage(lastMatch.id);
+				await generatePlayerTableImage(lastMatch.id);
 				await sendMatchEmbed(matchData, channel, player.gamerTag);
 			}
 		}
