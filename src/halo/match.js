@@ -48,7 +48,7 @@ const match = async (channel) => {
 				console.log(`\t\tUpdating ${lastMatch.id} for ${player.gamerTag}...`);
 				await matches.insert({ gamertag: player.gamerTag, matchId: lastMatch.id, timestamp: new Date() });
 				const matchData = await Halo.getMatchData(lastMatch.id);
-				await generatePlayerTableImage(lastMatch.id);
+				generatePlayerTableImage(lastMatch.id);
 				await sendMatchEmbed(matchData, channel, player.gamerTag);
 			}
 		}

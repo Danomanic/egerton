@@ -5,7 +5,6 @@ const { deployCommands } = require('./deploy-commands');
 const { executeCommands } = require('./execute-commands');
 const { match } = require('./halo/match');
 const pjson = require('../package.json');
-console.log(pjson.version);
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
