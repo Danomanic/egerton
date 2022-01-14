@@ -18,11 +18,12 @@ const executeCommands = (client) => {
 		if (!command) return;
 
 		try {
+			console.log(`Executing command { commandName:${interaction.commandName}, commandId:${interaction.commandId}, guildId:${interaction.guildId}, }`);
 			await command.execute(interaction);
 		}
 		catch (error) {
 			console.error(error);
-			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
 		}
 	});
 };

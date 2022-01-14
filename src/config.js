@@ -7,7 +7,6 @@ module.exports = Object.freeze({
 	CLIENT_ID: process.env.CLIENT_ID,
 	GUILD_ID: process.env.GUILD_ID,
 	CHANNEL_ID: process.env.CHANNEL_ID,
-	GAMER_TAGS : process.env.GAMER_TAGS.split(','),
 	CLOUDFRONT_DOMAIN: process.env.CLOUDFRONT_DOMAIN,
 	EGERTON_IMAGES_API: process.env.EGERTON_IMAGES_API,
 });

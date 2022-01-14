@@ -12,9 +12,9 @@ module.exports = {
 		.addStringOption(option => option.setName('gamertag').setDescription('The Players Xbox Gamertag')),
 	permissions: [],
 	async execute(interaction) {
-		await interaction.deferReply();
+		const gamertag = await interaction.options.getString('gamertag');
+		await interaction.reply(`Fetching stats for ${gamertag}... (this can take a few seconds).`);
 		try {
-			const gamertag = await interaction.options.getString('gamertag');
 			const genUuid = uuid.v1();
 			const repsonse = await axios.get(`${config.EGERTON_IMAGES_API}/generate/gamertag/${gamertag}/${genUuid}`);
 			if (repsonse.status === 200) {
