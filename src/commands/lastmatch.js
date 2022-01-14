@@ -9,12 +9,12 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('lastmatch')
 		.setDescription('Get info on a Gamer Tags last match.')
-		.addStringOption(option => option.setName('gamertag').setDescription('The Players Xbox Gamertag')),
+		.addStringOption(option => option.setName('gamertag').setDescription('The Players Xbox Gamertag').setRequired(true)),
 	permissions: [],
 	async execute(interaction) {
-		await interaction.deferReply();
+		const gamertag = await interaction.options.getString('gamertag');
+		await interaction.reply({ content: `Fetching last match results for ${gamertag}... (this can take a few seconds).`, ephemeral: true });
 		try {
-			const gamertag = await interaction.options.getString('gamertag');
 			const lastMatch = await Halo.getLastMatch(gamertag);
 			await axios.get(`${config.EGERTON_IMAGES_API}/generate/match/${lastMatch.id}`);
 
@@ -24,11 +24,11 @@ module.exports = {
 				.setAuthor({ name: 'Egerton', iconURL: 'https://i.imgur.com/YEjKMuZ.png' })
 				.setDescription(`Here are the stats for ${gamertag}'s last match`)
 				.setImage(`${config.CLOUDFRONT_DOMAIN}/match/${lastMatch.id}.png`);
-			await interaction.editReply({ embeds: [embedBuilder] });
+			await interaction.followUp({ embeds: [embedBuilder] });
 
 		}
 		catch (err) {
-			await interaction.editReply('Gamertag does not have a last RANKED match. Is the Gamertag correct?');
+			await interaction.followUp({ conent: 'Gamertag does not have a last RANKED match. Is the Gamertag correct?', ephemeral: true });
 		}
 	},
 };

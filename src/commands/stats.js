@@ -27,12 +27,12 @@ module.exports = {
 				await interaction.followUp({ embeds: [embedBuilder] });
 			}
 			else {
-				await interaction.followUp('Gamertag does not exist. Is the Gamertag correct?');
+				await interaction.followUp({ content: 'Gamertag does not exist. Is the Gamertag correct?', ephemeral: true });
 			}
 		}
 		catch (err) {
 			console.log(err);
-			await interaction.followUp('Something went wrong, please try again later.');
+			await interaction.followUp({ content : 'Something went wrong, please try again later.', ephemeral: true });
 		}
 	},
 };
