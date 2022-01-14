@@ -41,19 +41,19 @@ const match = async (channel) => {
 
 	const playersToCheck = await players.find({ });
 	for (const player of playersToCheck) {
-		const lastMatch = await Halo.getLastMatch(player.gamerTag);
-		console.log(`\tChecking ${player.gamerTag}...`);
-		if (!await matches.findOne({ matchId: lastMatch.id })) {
-			try {
+		try {
+			console.log(`\tChecking ${player.gamerTag}...`);
+			const lastMatch = await Halo.getLastMatch(player.gamerTag);
+			if (!await matches.findOne({ matchId: lastMatch.id })) {
 				console.log(`\t\tUpdating ${lastMatch.id} for ${player.gamerTag}...`);
 				await matches.insert({ gamertag: player.gamerTag, matchId: lastMatch.id, timestamp: new Date() });
 				const matchData = await Halo.getMatchData(lastMatch.id);
 				await generatePlayerTableImage(lastMatch.id);
 				await sendMatchEmbed(matchData, channel, player.gamerTag);
 			}
-			catch (error) {
-				console.log(error);
-			}
+		}
+		catch (error) {
+			console.log(error);
 		}
 	}
 

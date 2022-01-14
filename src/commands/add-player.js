@@ -22,15 +22,16 @@ module.exports = {
 	async execute(interaction) {
 		const user = await interaction.user;
 		const gamerTag = await interaction.options.getString('gamertag').toLowerCase();
-		await interaction.reply(`Hello <@${user.id}> - I'm just checking to see if the GamerTag ${gamerTag} exists...`);
+		await interaction.reply({ content : `Hello <@${user.id}> - I'm just checking to see if the GamerTag ${gamerTag} exists...`, ephemeral: true });
 		try {
 			const lastMatch = await Halo.getLastMatch(gamerTag);
 			if (lastMatch.id && !await players.findOne({ gamerTag })) {
 				await players.insert({ gamerTag, user: user.id, guildId: interaction.guildId, channelId: interaction.channelId });
-				await interaction.followUp(`<@${user.id}> GamerTag exists! I've added ${gamerTag} to the Database to check for new matches.`);
+				await interaction.followUp({ content: `<@${user.id}> GamerTag exists! I've added ${gamerTag} to the Database to check for new matches.`, ephemeral: true });
 			}
 		}
 		catch (err) {
+			console.log(err);
 			await interaction.editReply(`<@${user.id}> Something went wrong while trying to add the GamerTag. Is the GamerTag correct?`);
 		}
 	},

@@ -13,7 +13,7 @@ module.exports = {
 	permissions: [],
 	async execute(interaction) {
 		const gamertag = await interaction.options.getString('gamertag');
-		await interaction.reply(`Fetching stats for ${gamertag}... (this can take a few seconds).`);
+		await interaction.reply({ content: `Fetching stats for ${gamertag}... (this can take a few seconds).`, ephemeral: true });
 		try {
 			const genUuid = uuid.v1();
 			const repsonse = await axios.get(`${config.EGERTON_IMAGES_API}/generate/gamertag/${gamertag}/${genUuid}`);
@@ -24,14 +24,15 @@ module.exports = {
 					.setAuthor({ name: 'Egerton', iconURL: 'https://i.imgur.com/YEjKMuZ.png' })
 					.setDescription(`Here are the stats for ${gamertag}`)
 					.setImage(`${config.CLOUDFRONT_DOMAIN}/gamertag/${genUuid}.png`);
-				await interaction.editReply({ embeds: [embedBuilder] });
+				await interaction.followUp({ embeds: [embedBuilder] });
 			}
 			else {
-				await interaction.editReply('Gamertag does not exist. Is the Gamertag correct?');
+				await interaction.followUp('Gamertag does not exist. Is the Gamertag correct?');
 			}
 		}
 		catch (err) {
-			await interaction.editReply('Something went wrong, please try again later.');
+			console.log(err);
+			await interaction.followUp('Something went wrong, please try again later.');
 		}
 	},
 };
