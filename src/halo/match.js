@@ -22,7 +22,7 @@ const sendMatchEmbed = async (matchData, channel, gamerTag) => {
 		.addField('Map', `${matchData.details.map.name} (${matchData.details.playlist.name})`, true)
 		.addField('Guildies', allGuildies, true)
 		.addField('Gametype', matchData.details.category.name, true)
-		.addField('Duration', matchData.duration.human)
+		.addField('Duration', matchData.duration.human, true)
 		.addField('Teams', teamResultsTable(matchData.teams.details), false)
 		.setImage(`${config.CLOUDFRONT_DOMAIN}/match/${matchData.id}.png`)
 		.setURL('https://tracker.gg/halo-infinite/match/' + matchData.id)
@@ -53,7 +53,7 @@ const match = async (channel) => {
 			}
 		}
 		catch (error) {
-			console.log(error);
+			JSON.stringify(error, Object.getOwnPropertyNames(error));
 		}
 	}
 
