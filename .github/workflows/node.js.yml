@@ -29,14 +29,4 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
-    - name: "Automated Version Bump"
-      id: version-bump
-      uses: "phips28/gh-action-bump-version@master"
-      with:
-        tag-prefix: ''
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: 'Output Step'
-      env:
-        NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
-      run: echo "new tag $NEW_TAG"
+    
