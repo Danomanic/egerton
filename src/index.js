@@ -3,13 +3,15 @@ const CronJob = require('cron').CronJob;
 const config = require('./config');
 const { deployCommands } = require('./deploy-commands');
 const { executeCommands } = require('./execute-commands');
-const { match } = require('./halo/match');
+const { match } = require('./tasks/match');
 const pjson = require('../package.json');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
+client.login(config.TOKEN);
+
 const job = new CronJob('* * * * *', function() {
-	match(client.channels.cache.get(config.CHANNEL_ID));
+	match(client);
 }, null, true, 'Europe/London');
 
 client.once('ready', async () => {
@@ -19,5 +21,3 @@ client.once('ready', async () => {
 	job.start();
 });
 executeCommands(client);
-
-client.login(config.TOKEN);
