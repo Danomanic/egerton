@@ -1,13 +1,12 @@
 const config = require('../config');
 const { MessageEmbed } = require('discord.js');
-const { teamResultsTable } = require('./match-table');
 const { getOutcomeColour } = require('../helpers/formatter');
 const { getGamerTagStats, getAllGuildies } = require('../helpers/guildies');
 
 const getMatchEmbed = async (matchData, gamerTag) => {
 	const gamerTagStats = await getGamerTagStats(gamerTag, matchData.players);
 	const allGuildies = await getAllGuildies(matchData.players);
-	const embedBuilder = new MessageEmbed()
+	return new MessageEmbed()
 		.setColor(getOutcomeColour(gamerTagStats.outcome))
 		.setTitle(`${gamerTagStats.gamertag} played a match!`)
 		.setAuthor({ name: 'Egerton', iconURL: 'https://i.imgur.com/YEjKMuZ.png' })
@@ -23,8 +22,6 @@ const getMatchEmbed = async (matchData, gamerTag) => {
 		.setURL('https://tracker.gg/halo-infinite/match/' + matchData.id)
 		.addField('Tracker.gg Link', 'https://tracker.gg/halo-infinite/match/' + matchData.id)
 		.setTimestamp(new Date(matchData.played_at));
-
-	return embedBuilder;
 };
 
 module.exports = { getMatchEmbed };
